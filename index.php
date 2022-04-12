@@ -41,7 +41,12 @@
 				 	for(let i = 0; i < x; i++){
 				 		this.map.push(new Array());
 				 		for(let j = 0; j < y; j++){
-				 			this.map[i].push(new MapBlock());
+				 			if(i == 0 || j == 0 || i == x - 1 || j == y - 1){
+				 				this.map[i].push(new MapBlock(true));
+				 			}else{
+				 				this.map[i].push(new MapBlock(false));
+
+				 			}
 				 		}
 				 	}
 
@@ -86,12 +91,18 @@
 			}
 
 			class MapBlock{
-				constructor(){
+				constructor(b){
+					this.blocking = b;
 					this.element = this.render();
 				}
 				render(){
 					let el = document.createElement("div");
 					el.className = "mapBlock";
+					if(this.blocking){
+						el.style.background = "red";
+					} else {
+						el.style.background = "green";
+					}
 					return el;
 				}
 			}
@@ -140,16 +151,57 @@
 
 			}
 
-			let myMap = new MyMap(5,5);
-			let myPerson = new Person(0,1);
-			let tree1 = new Tree(2,2);
+			let myMap = new MyMap(7,7);
+			let myPerson = new Person(3,3);
+	/*		let tree1 = new Tree(2,2);
 			let tree2 = new Tree(3,4);
-			let tree3 = new Tree(0,0);
+			let tree3 = new Tree(0,0);*/
+			let buttonUp = document.createElement("button");
+			buttonUp.innerText = "North";
+			buttonUp.addEventListener("click", () => {
+				if(myMap.map[myPerson.location[0]-1][myPerson.location[1]].blocking){
+				} else{
+					myPerson.move(myPerson.location[0]-1, myPerson.location[1]);
+					myMap.update();
+				}
+			});
+			let buttonDown = document.createElement("button");
+			buttonDown.innerText = "South";
+			buttonDown.addEventListener("click", () => {
+				if(myMap.map[myPerson.location[0]+1][myPerson.location[1]].blocking){
+				} else{
+					myPerson.move(myPerson.location[0]+1, myPerson.location[1]);
+					myMap.update();
+				}
+			});
+			let buttonLeft = document.createElement("button");
+			buttonLeft.innerText = "West";
+			buttonLeft.addEventListener("click", () => {
+				if(myMap.map[myPerson.location[0]][myPerson.location[1]-1].blocking){
+				} else{
+					myPerson.move(myPerson.location[0], myPerson.location[1]-1);
+					myMap.update();
+				}
+			});
+			let buttonRight = document.createElement("button");
+			buttonRight.innerText = "East";
+			buttonRight.addEventListener("click", () => {
+				if(myMap.map[myPerson.location[0]][myPerson.location[1]+1].blocking){
+				} else{
+					myPerson.move(myPerson.location[0], myPerson.location[1]+1);
+					myMap.update();
+				}
+			});
 			document.getElementsByTagName("body")[0].appendChild(myMap.element);
 			myMap.addNewEntity(myPerson);
-			myMap.addNewEntity(tree1);
+/*			myMap.addNewEntity(tree1);
 			myMap.addNewEntity(tree2);
-			myMap.addNewEntity(tree3);
+			myMap.addNewEntity(tree3);*/
+
+			document.getElementsByTagName("body")[0].appendChild(buttonUp);
+			document.getElementsByTagName("body")[0].appendChild(buttonDown);
+			document.getElementsByTagName("body")[0].appendChild(buttonLeft);
+			document.getElementsByTagName("body")[0].appendChild(buttonRight);
 		</script>
 	</body>
 </html>
